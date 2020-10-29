@@ -3,6 +3,7 @@ package com.akn.taskmanager.controller;
 import com.akn.taskmanager.model.User;
 import com.akn.taskmanager.service.JWTTokenService;
 import com.akn.taskmanager.service.UserService;
+import com.sun.deploy.net.HttpResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +22,11 @@ public class UserController {
     JWTTokenService jwtTokenService;
 
     @PostMapping("/register")
-    public User register(@RequestBody @Valid User user){
-        return userService.register(user);
+    public ResponseEntity<User> register(@RequestBody @Valid User user){
+        if(userService.getUser(user) != null) {
+            return new ResponseEntity(null,HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<User>(userService.register(user), HttpStatus.OK);
     }
 
     @GetMapping("/hello")
