@@ -12,6 +12,8 @@ public class WebConfiguration implements WebMvcConfigurer {
 
         registry.addMapping("/**")
                 .allowedOrigins("*")
-                .allowedMethods("*");
+                .allowedMethods("*")
+                .allowedHeaders("*")
+                .exposedHeaders("token","refresh_token");
     }
 }
