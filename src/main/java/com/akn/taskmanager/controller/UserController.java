@@ -6,9 +6,12 @@ import com.akn.taskmanager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.nio.file.attribute.UserPrincipal;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/user")
@@ -22,15 +25,10 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody @Valid User user){
-        if(userService.getUser(user) != null) {
+        if(userService.getUser(user.getEmail()) != null) {
             return new ResponseEntity(null,HttpStatus.CONFLICT);
         }
         return new ResponseEntity<User>(userService.register(user), HttpStatus.OK);
-    }
-
-    @GetMapping("/hello")
-    public String hello(){
-        return "Hello World";
     }
 
     @PostMapping("/token/refresh")
@@ -41,5 +39,11 @@ public class UserController {
           return new ResponseEntity<String>(accessToken, HttpStatus.OK);
         }
         return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
+    }
+
+    @GetMapping
+    public ResponseEntity<User> getUser(@Autowired Principal principal) {
+        User user = userService.getUser(principal.getName());
+        return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 }

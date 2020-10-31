@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
@@ -25,12 +26,19 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String[] urls = {"/token/refresh", "/register" };
+        boolean shouldNotFilter = Arrays.stream(urls)
+                .anyMatch(url -> request.getRequestURI().contains(url));
+        return shouldNotFilter;
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String header = request.getHeader(jwtTokenService.getHeaderString());
 
-        boolean isRefreshRequest = request.getRequestURI().contains("/token/refresh");
 
-        if (header == null || !header.startsWith(jwtTokenService.getTokenPrefix()) || isRefreshRequest) {
+        if (header == null || !header.startsWith(jwtTokenService.getTokenPrefix())) {
             chain.doFilter(request, response);
             return;
         }
