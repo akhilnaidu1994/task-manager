@@ -26,7 +26,7 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String[] urls = {"/token/refresh", "/register" };
         boolean shouldNotFilter = Arrays.stream(urls)
                 .anyMatch(url -> request.getRequestURI().contains(url));

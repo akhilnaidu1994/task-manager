@@ -31,7 +31,7 @@ public class UserController {
         return new ResponseEntity<User>(userService.register(user), HttpStatus.OK);
     }
 
-    @PostMapping("/token/refresh")
+    @PostMapping(value = "/token/refresh",produces = "text/plain")
     public ResponseEntity<String> refreshToken(@RequestHeader("Authorization") String token){
         String username =  jwtTokenService.validateRefreshToken(token);
         if(username != null) {
