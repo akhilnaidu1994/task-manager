@@ -6,4 +6,4 @@ COPY ./target/task-manager.jar .
 
 EXPOSE 8080
 
-RUN ["java", "-jar", "task-manager.jar"]
+CMD ["java", "-jar", "task-manager.jar"]
