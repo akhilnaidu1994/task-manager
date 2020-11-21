@@ -3,11 +3,8 @@ package com.akn.taskmanager.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -25,6 +22,9 @@ public class User {
     private String email;
 
     private String password;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Project> projects;
 
     public User(String firstName, String lastName, String email, String password) {
         this.firstName = firstName;
@@ -76,5 +76,13 @@ public class User {
     @JsonProperty
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 }
