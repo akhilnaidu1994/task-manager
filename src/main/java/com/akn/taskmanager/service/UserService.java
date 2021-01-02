@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -22,8 +24,15 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
+    public List<User> searchUser(String searchText) {
+        return userRepository.searchUsers(searchText);
+    }
+
     public  User getUser(String username) {
         return this.userRepository.findByEmail(username);
     }
 
+    public User getUserById(String id) {
+        return this.userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    }
 }
