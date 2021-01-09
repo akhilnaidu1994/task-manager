@@ -28,6 +28,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/akn-chat/**").permitAll()
                 .antMatchers("/user/register", "/user/token/refresh").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated().and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager(),jwtTokenService))
                 .addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtTokenService))

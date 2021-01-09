@@ -2,6 +2,7 @@ package com.akn.taskmanager.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -96,10 +97,16 @@ public class JWTTokenService {
     }
 
     public String validateAccessToken(String token){
-        return JWT.require(Algorithm.HMAC512(getTokenSecret().getBytes()))
-                .build()
-                .verify(token.replace(getTokenPrefix(), ""))
-                .getSubject();
+        try {
+            return JWT.require(Algorithm.HMAC512(getTokenSecret().getBytes()))
+                    .build()
+                    .verify(token.replace(getTokenPrefix(), ""))
+                    .getSubject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
     public String validateRefreshToken(String token){
